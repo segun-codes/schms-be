@@ -1,0 +1,28 @@
+{
+  "name": "schms-backend",
+  "version": "1.0.0",
+  "description": "A backend software system to manage business processes typical of primary and secondary schools.",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "nodemon app.js",
+    "start:prod": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "school",
+    "test",
+    "exam",
+    "primary",
+    "secondary"
+  ],
+  "author": "Finacle Systems Limited",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "knex": "^2.5.1",
+    "morgan": "^1.10.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.6.1"
+  }
+}
