@@ -7,21 +7,25 @@ const studentMgmtRouter = express.Router();
 
 // retrieves a registered student given studentId
 studentMgmtRouter.get('/:studentId', async (req, res) => {
-    const studentId = +req.params.studentId;
-    const studentData = await studentController.retrieveStudent(studentId);
+    const studentId = req.params.studentId;
+    const stdData = await studentController.retrieveStudent(studentId);
 
-    if (!studentData.length) {
-        res.status(404).send({status: 'failed', message: 'student not found'});
-    } else {
-        res.status(200).send({
-            status: 'success',
-            payload: {
-                id: studentData[0].student_id,
-                firstName: studentData[0].first_name,
-                lastName: studentData[0].last_name
-            }
-        });
-    }
+    res.status(stdData.code).send({ 
+        status: stdData.status, 
+        message: stdData.message, 
+        payload: stdData.payload 
+    });
+});
+
+// retrieves all registered students
+studentMgmtRouter.get('/', async (req, res) => {
+    const stdData = await studentController.retrieveAllStudents();
+    
+    res.status(stdData.code).send({ 
+        status: stdData.status, 
+        message: stdData.message, 
+        payload: stdData.payload 
+    });
 });
 
 // retrieves all students in a class given a sessionId, termId, classId, student id is gauranteed to be unique  20230001
@@ -62,47 +66,36 @@ studentMgmtRouter.get('/', (req, res) => {
 //  registering a new student. Creates profile for the student automatically
 //  session and class must have been created as their corresponding ids will be required to perform the operation below
 // const urlencodedParser = bodyParser.urlencoded({ extended: false })
-
 studentMgmtRouter.post('/', async (req, res) => {
     const student = req.body;
-    const rowCount = await studentController.writeStudent(student.firstName, student.lastName);
-
-    if (!rowCount) {
-        res.status(400).send({status: 'failed', message: 'student not registered' });   
-    }
+    const wStatus = await studentController.writeStudent(student.studentId, student.firstName, student.lastName);
     
-    res.status(201).send({status: 'success', message: 'student registered'});
+    res.status(wStatus.code).send({ 
+        status: wStatus.status, 
+        message: wStatus.message 
+    });
 });
 
 // update student profile
 studentMgmtRouter.patch('/', async (req, res) => {
     const studentUpdate = req.body;
+    const uStatus = await studentController.updateStudent(studentUpdate);
 
-    const updatedRowCount = await studentController.updateStudent(studentUpdate);
-
-    if (!updatedRowCount) {
-        res.status(400).send({status: 'failed', status: 'student not updated'});
-    }
-
-    res.status(201).send({status: 'success', status: 'student updated'});
+    res.status(uStatus.code).send({
+        status: uStatus.status, 
+        message: uStatus.message
+    });
 });
 
 // delete student profile
 studentMgmtRouter.delete('/:studentId', async (req, res) => {
-    const studentId = +req.params.studentId;
-    const deleteCount = await studentController.deleteStudent(studentId);
+    const studentId = req.params.studentId;
+    const dStatus = await studentController.deleteStudent(studentId);
 
-    let responseCode = 400;
-    let statusMsge = 'failed';
-    let msge = 'no student to delete';
-
-    if (deleteCount) {
-        responseCode = 200;
-        statusMsge = 'success';
-        msge = 'student deleted'
-    }
-
-    res.status(responseCode).send({status: statusMsge, message: msge});
+    res.status(dStatus.code).send({ 
+        status: dStatus.status, 
+        message: dStatus.message 
+    });
 });
 
 module.exports = studentMgmtRouter;

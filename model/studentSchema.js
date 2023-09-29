@@ -16,6 +16,20 @@ const getDBConnection = async () => {
     }
 };
 
+const makeStudentIdUnique = async () => {
+    try {
+            await mysqlConn.schema.alterTable('students', (t) => {
+                t.unique('student_id');
+        });
+    } catch(err) {
+        if (err.code === 'ER_DUP_ENTRY') {
+           throw err;
+        } else {
+            console.log('Making student ID unique failed!');
+        }
+    }
+}; 
+
 const studentSchema = async () => { 
     const conn = await getDBConnection();
 
@@ -27,12 +41,16 @@ const studentSchema = async () => {
         if (!tableExists) {
             try {
                 await mysqlConn.schema
-                    .createTable('students', (table) => {     
-                        table.increments('student_id');
+                    .createTable('students', (table) => { 
+                        table.primary(['id', 'student_id']); 
+                        table.increments('id'); 
+                        table.string('student_id');      
                         table.string('first_name');
                         table.string('last_name');
                         console.log('Schema setup successful');    
                     });
+                await makeStudentIdUnique();
+                console.log('control got here...');
             } catch(err) {
                 throw err;
             }
