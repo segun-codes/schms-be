@@ -68,7 +68,7 @@ studentMgmtRouter.get('/', (req, res) => {
 // const urlencodedParser = bodyParser.urlencoded({ extended: false })
 studentMgmtRouter.post('/', async (req, res) => {
     const student = req.body;
-    const wStatus = await studentController.writeStudent(student.studentId, student.firstName, student.lastName);
+    const wStatus = await studentController.writeStudent(student);
     
     res.status(wStatus.code).send({ 
         status: wStatus.status, 
