@@ -1,10 +1,8 @@
 const express = require('express');
-const { isValidAPIKey, isLogin, isSubscribed, getModuleSubscribed } = require('../utils/getway-services');
+const { isValidAPIKey, isLogin, isSubscribed, getModuleSubscribed } = require('../utils/getwayServices');
 const apiGatewayRouter = express.Router();
 
 //Doc
-// 
-//
 apiGatewayRouter.use((req, res, next) => {       
     const isValidKey = isValidAPIKey();
 
@@ -14,7 +12,6 @@ apiGatewayRouter.use((req, res, next) => {
     }
 
     console.log('A subcriber has logged in');
-
     const moduleSubscribed = getModuleSubscribed();
     
     for (const module of moduleSubscribed) {

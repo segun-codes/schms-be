@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser')
-const studentController = require('../../controllers/studentController');
+const studentController = require('../../controllers/basic/studentController');
 
 
 const studentMgmtRouter = express.Router();
@@ -8,23 +8,23 @@ const studentMgmtRouter = express.Router();
 // retrieves a registered student given studentId
 studentMgmtRouter.get('/:studentId', async (req, res) => {
     const studentId = req.params.studentId;
-    const stdData = await studentController.retrieveStudent(studentId);
+    const student = await studentController.retrieveStudent(studentId);
 
-    res.status(stdData.code).send({ 
-        status: stdData.status, 
-        message: stdData.message, 
-        payload: stdData.payload 
+    res.status(student.code).send({ 
+        status: student.status, 
+        message: student.message, 
+        payload: student.payload 
     });
 });
 
 // retrieves all registered students
 studentMgmtRouter.get('/', async (req, res) => {
-    const stdData = await studentController.retrieveAllStudents();
+    const students = await studentController.retrieveAllStudents();
     
-    res.status(stdData.code).send({ 
-        status: stdData.status, 
-        message: stdData.message, 
-        payload: stdData.payload 
+    res.status(students.code).send({ 
+        status: students.status, 
+        message: students.message, 
+        payload: students.payload 
     });
 });
 
@@ -90,7 +90,7 @@ studentMgmtRouter.patch('/', async (req, res) => {
 // delete student profile
 studentMgmtRouter.delete('/:studentId', async (req, res) => {
     const studentId = req.params.studentId;
-    const dStatus = await studentController.deleteStudent(studentId);
+    const dStatus = await studentController.removeStudent(studentId);
 
     res.status(dStatus.code).send({ 
         status: dStatus.status, 
