@@ -3,10 +3,10 @@ const bodyParser = require('body-parser')
 const studentController = require('../../controllers/basic/studentController');
 
 
-const studentMgmtRouter = express.Router();
+const studentRouter = express.Router();
 
 // retrieves a registered student given studentId
-studentMgmtRouter.get('/:studentId', async (req, res) => {
+studentRouter.get('/:studentId', async (req, res) => {
     const studentId = req.params.studentId;
     const student = await studentController.retrieveStudent(studentId);
 
@@ -18,7 +18,7 @@ studentMgmtRouter.get('/:studentId', async (req, res) => {
 });
 
 // retrieves all registered students
-studentMgmtRouter.get('/', async (req, res) => {
+studentRouter.get('/', async (req, res) => {
     const students = await studentController.retrieveAllStudents();
     
     res.status(students.code).send({ 
@@ -29,44 +29,44 @@ studentMgmtRouter.get('/', async (req, res) => {
 });
 
 // retrieves all students in a class given a sessionId, termId, classId, student id is gauranteed to be unique  20230001
-studentMgmtRouter.get('/:schSessionId/:termId/:classId', (req, res) => {
+studentRouter.get('/:schSessionId/:termId/:classId', (req, res) => {
     res.status(500).send({code: 1001, status: 'all students in given class retrieved'});
 });
 
 // retrieves all students in a class given a sessionId and classId, student id is gauranteed to be unique 20230001
-studentMgmtRouter.get('/:schSessionId/:classId', (req, res) => {
+studentRouter.get('/:schSessionId/:classId', (req, res) => {
     res.status(500).send({code: 1001, status: 'all students in given class retrieved'});
 });
 
 // retrieves a registered student given classId and studentId - alternative to the above
-studentMgmtRouter.get('/:classId/:studentid', (req, res) => {
+studentRouter.get('/:classId/:studentid', (req, res) => {
     res.status(500).send({code: 1001, status: 'all student in given class retrieved'});
 });
 
 // retrieves all registered students in a school session given a schlSessionId
-studentMgmtRouter.get('/:schSessionId', (req, res) => {
+studentRouter.get('/:schSessionId', (req, res) => {
     res.status(500).send({code: 1001, status: 'all student in given class retrieved'});
 });
 
 // retrieves all registered students in a class given a schlSessionId and classId
-studentMgmtRouter.get('/:schSessionId/:classId', (req, res) => {
+studentRouter.get('/:schSessionId/:classId', (req, res) => {
     res.status(500).send({code: 1001, status: 'all student in given class retrieved'});
 });
 
 // retrieves all a registered students given schlSessionId, classId and studentId
-studentMgmtRouter.get('/:schSessionId/:classId/:studentid', (req, res) => {
+studentRouter.get('/:schSessionId/:classId/:studentid', (req, res) => {
     res.status(500).send({code: 1001, status: 'all student in given class retrieved'});
 });
 
 // retrieves all students registered for at least one session historical till date
-studentMgmtRouter.get('/', (req, res) => {
+studentRouter.get('/', (req, res) => {
     res.status(500).send({code: 1001, status: 'all students retrieved'});
 });
 
 //  registering a new student. Creates profile for the student automatically
 //  session and class must have been created as their corresponding ids will be required to perform the operation below
 // const urlencodedParser = bodyParser.urlencoded({ extended: false })
-studentMgmtRouter.post('/', async (req, res) => {
+studentRouter.post('/', async (req, res) => {
     const student = req.body;
     const wStatus = await studentController.writeStudent(student);
     
@@ -77,7 +77,7 @@ studentMgmtRouter.post('/', async (req, res) => {
 });
 
 // update student profile
-studentMgmtRouter.patch('/', async (req, res) => {
+studentRouter.patch('/', async (req, res) => {
     const studentUpdate = req.body;
     const uStatus = await studentController.updateStudent(studentUpdate);
 
@@ -88,7 +88,7 @@ studentMgmtRouter.patch('/', async (req, res) => {
 });
 
 // delete student profile
-studentMgmtRouter.delete('/:studentId', async (req, res) => {
+studentRouter.delete('/:studentId', async (req, res) => {
     const studentId = req.params.studentId;
     const dStatus = await studentController.removeStudent(studentId);
 
@@ -98,4 +98,4 @@ studentMgmtRouter.delete('/:studentId', async (req, res) => {
     });
 });
 
-module.exports = studentMgmtRouter;
+module.exports = studentRouter;

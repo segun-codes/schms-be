@@ -8,4 +8,10 @@ const config = {
     DATABASE: 'nafowa_sch_db'
 };
 
+// Consider moving this to the database eventually
+const schoolNames = [
+    { 'nafowa': 'NLS' },
+    { 'heritage': 'HSC'}
+];
+
 module.exports = config;

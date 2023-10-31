@@ -37,3 +37,16 @@ You will need to update/create the following files:
 3. router (in folder routes)
 4. update dbOperations 
 5. update the schemaSetup source file
+
+# ID Generation Format
+"studentId": "NLS20231001", 
+SSYYYYLTNNNN - 
+SS     - two letters from school name
+YYYY   -  year of admission
+T      -  term 
+NNNN  - a serial number; this number restarts from one after end of each year; this means a maximum of 9999students can be onboarded per term 
+
+
+# Subfolder "Admin"
+Contains services that is shareable among many schools subscribed to the platform
+

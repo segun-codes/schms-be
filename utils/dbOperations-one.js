@@ -140,6 +140,12 @@ const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria) => 
     const schlCurriculumPropertySet = ['curriculumId', 'weekNo', 'topic', 'objective', 'details', 'comment'];
     const stdAddressPropertySet = ['stdAddressId', 'studentId', 'houseNo', 'streetLineOne', 'streetLineTwo', 'townCity', 'stateRegion', 'country', 'postCode'];
     const parentPropertySet = ['parentId', 'firstName', 'lastName', 'phone', 'email', 'photoUrl'];
+    const schoolPropertySet = ['name', 'nameAcronym', 'type', 'address', 'lastStudentNo', 'lastEmployeeNo', 'lastParentNo'];
+    const employeePropertySet = [
+        'empId', 'firstName', 'middleName', 'lastName', 
+        'dob', 'photoUrl',  'employmentDate', 'statusOfEmployment', 
+        'role', 'phoneNo', 'email', 'addressId'
+    ];
     const studentPropertySet = [
         'studentId', 'firstName', 'middleName', 
         'lastName', 'dob', 'genotype', 'bloodGroup', 
@@ -162,6 +168,9 @@ const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria) => 
         case 'students': 
             targetPropertySet = studentPropertySet;
             break; 
+        case 'employees':
+            targetPropertySet = employeePropertySet;
+            break;
         case 'subjects': 
             targetPropertySet = subjectPropertySet;
             break;
@@ -180,6 +189,9 @@ const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria) => 
         case 'parents':
             targetPropertySet = parentPropertySet;
             break;
+        case 'schools':
+            targetPropertySet = schoolPropertySet;
+            break;
     }
 
     await setUpSchema();
@@ -196,7 +208,6 @@ const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria) => 
         };
     }
 
-    //console.log('updateObject: ', updateObject);
     if (updateObject) {
         try {
             console.log('updateObject: ', updateObject);

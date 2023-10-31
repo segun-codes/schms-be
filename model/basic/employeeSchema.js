@@ -10,20 +10,20 @@ const employeeSchema = async () => {
     if (conn) {
         console.log('MySQL DB Connected');
         
-        const tableExists = await isTableExist('employee');
+        const tableExists = await isTableExist('employees');
 
         if (!tableExists) {
             try {
                 await mysqlConn.schema
-                    .createTable('employee', (table) => { 
+                    .createTable('employees', (table) => { 
                         table.primary(['id', 'emp_id']); 
                         table.increments('id'); 
                         table.string('emp_id').notNullable(); // change data type this to equivalent of long      
                         table.string('first_name').notNullable(); // accepts "first", "second", "third" (i.e., first-term, second-term and third-term) - limit what valuable than can be entered here???
-                        table.string('last_name').notNullable(); // eventually this should be extracted from "academic_sessions" table
                         table.string('middle_name').notNullable(); 
-                        table.string('photo').notNullable(); 
+                        table.string('last_name').notNullable(); // eventually this should be extracted from "academic_sessions" table
                         table.date('dob').notNullable(); 
+                        table.string('photo_url').notNullable(); 
                         table.date('employment_date').notNullable(); 
                         table.string('status_of_employment').notNullable(); // values: active, exited 
                         table.string('role').notNullable(); // possible values: hod, head-teacher, teacher, minder, admin, cleaner, assistant  
@@ -34,7 +34,7 @@ const employeeSchema = async () => {
                         console.log('employee schema setup successful');    
                     });
                 
-                await makeFieldUnique('employee', 'emp_id'); 
+                await makeFieldUnique('employees', 'emp_id'); 
             } catch(err) {
                 throw err;
             }
