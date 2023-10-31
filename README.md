@@ -1,6 +1,6 @@
 # schms-be
 This is a school management. 
-It incorporate facility and features to simplify and automate business management process in elementary and secondary schools.
+It incorporates facility and features to simplify and automate business management process in elementary and secondary schools.
 
 # EXPECTED FEATURES
 ## Basic module
@@ -50,3 +50,10 @@ NNNN  - a serial number; this number restarts from one after end of each year; t
 # Subfolder "Admin"
 Contains services that is shareable among many schools subscribed to the platform
 
+# Sequence of setup
+Adhere to the sequence below to rig-up the school management system
+1. Create school
+2. Create session
+3. Create term
+4. ...
+5. ..
