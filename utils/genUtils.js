@@ -12,11 +12,12 @@ const convertToSnakeCase = (property) => {
 
 // transforms word in snake case to camel case format
 const toCamelCase = (property) => {
+    let temp;
     let propertyInCamelCase = '';
     let capitalizeNextItem = false;
 
     for(i = 0; i < property.length; ++i) {
-        let temp = property.charAt(i);
+        temp = property.charAt(i);
 
         if (capitalizeNextItem) {
             propertyInCamelCase += temp.toUpperCase();
