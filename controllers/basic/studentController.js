@@ -1,14 +1,27 @@
 const mysqlConn = require('../../utils/dbConnection').mysqlConn;
+const idGenerationService = require('../../utils/idGenerationService');
+const getClientId = require('../../utils/admin/tokenService').getClientId;
 const { performWrite, performRead, performReadAll, performDelete, performUpdate } = require('../../utils/dbOperations-one');
-const errorMessages = require('../../config/errorConfig').errorMessages;
 
 
 const tableName = 'students';
 const itemToBeFetched = 'student';
 
 const writeStudent = async (studentData) => {
+    const targetField = 'last_student_no';
+    const targetFieldAcronym = 'name_acronym';
+    const apiToken = studentData.apiToken;
+    const sessYear = studentData.sessYear; // to be provided in a UI drop-down box whose entries are fetched from the "Sessions" table
+    const termId = studentData.termId;     // to be provided in a UI drop-down box whose entries are fetched from the "Sessions" table
+    
+    const clientId = getClientId(apiToken); // api token ships with each request
+    const schlAcronymObject= await performRead('schools', 'school acronym', { client_id: clientId }, [targetFieldAcronym]);  
+    const schlAcronym = schlAcronymObject.payload[0].name_acronym
+    const schlData = { schlAcronym, sessYear, termId };
+    const studentId = await idGenerationService.generateId(clientId, targetField, schlData); //schoolAcronym, targetField, { client, currSessYear, currSchTerm }
+
     const student = { 
-        student_id: studentData.studentId, 
+        student_id: studentId, 
         first_name: studentData.firstName, 
         middle_name: studentData.middleName, 
         last_name: studentData.lastName, 
@@ -27,6 +40,10 @@ const writeStudent = async (studentData) => {
     };  
     
     const writeStatus = await performWrite(tableName, student, 'student');
+
+    if (writeStatus.code === 201) {
+        writeStatus.newStudentId = studentId;
+    }
     
     return writeStatus;
 };
@@ -39,8 +56,10 @@ const retrieveStudent = async (studentId) => {
 const retrieveAllStudents = async () => {
     const fieldsToSelect = [
         'student_id', 'first_name', 'middle_name', 
-        'last_name', 'dob', 'photo_url', 'date_of_first_resumpt', 
-        'expected_grad_date', 'status', 'curr_teacher_id', 'parent_id'
+        'last_name', 'dob', 'genotype', 'blood_group',
+        'photo_url', 'address_id','date_of_first_resumpt', 
+        'expected_grad_date', 'status', 'class_id', 'teacher_id', 
+        'minder_id', 'parent_id'
     ];
     
     const students = await performReadAll(tableName, 'students',  fieldsToSelect);

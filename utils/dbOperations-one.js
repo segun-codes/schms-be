@@ -130,6 +130,8 @@ const deleteItem = async (tableName, itemName, queryCriteria) => {
  */
 
 const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria) => {
+    console.log('queryCriteria: ', queryCriteria);
+
     let targetPropertySet;
     let updateObject = {}; // used to construct object in format that knexjs requirement
 
@@ -140,7 +142,7 @@ const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria) => 
     const schlCurriculumPropertySet = ['curriculumId', 'weekNo', 'topic', 'objective', 'details', 'comment'];
     const stdAddressPropertySet = ['stdAddressId', 'studentId', 'houseNo', 'streetLineOne', 'streetLineTwo', 'townCity', 'stateRegion', 'country', 'postCode'];
     const parentPropertySet = ['parentId', 'firstName', 'lastName', 'phone', 'email', 'photoUrl'];
-    const schoolPropertySet = ['name', 'nameAcronym', 'type', 'address', 'lastStudentNo', 'lastEmployeeNo', 'lastParentNo'];
+    const schoolPropertySet = ['name', 'nameAcronym', 'type', 'address', 'lastStudentNo', 'lastEmployeeNo', 'lastParentNo', 'clientId'];
     const employeePropertySet = [
         'empId', 'firstName', 'middleName', 'lastName', 
         'dob', 'photoUrl',  'employmentDate', 'statusOfEmployment', 
@@ -196,8 +198,8 @@ const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria) => 
 
     await setUpSchema();
 
-    console.log('itemToUpdate: ', itemToUpdate);
-    console.log('targetPropertySet: ', targetPropertySet);
+    //console.log('itemToUpdate: ', itemToUpdate);
+    //console.log('targetPropertySet: ', targetPropertySet);
 
     // construct "updateObject" passed to be "update()"
     for (const property of targetPropertySet) {
@@ -210,18 +212,12 @@ const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria) => 
 
     if (updateObject) {
         try {
-            console.log('updateObject: ', updateObject);
-            console.log('tableName: ', tableName);
-            console.log('queryCriteria: ', queryCriteria);
-
             const updatedRowCount = await mysqlConn(tableName).where(queryCriteria).update(updateObject);
 
             if (updatedRowCount) {
                 console.log('Update completed');
                 return { code: 201, status: 'success', message: `${itemName} updated`};
             }
-
-            //return updatedRow;
         } catch(err) {
             console.log('err: ', err);
             console.log(`Updating ${itemName} failed`);

@@ -1,12 +1,13 @@
 const express = require('express');
-const { isValidAPIKey, isLogin, isSubscribed, getModuleSubscribed } = require('../utils/getwayServices');
+
+const {isLogin, isSubscribed, getModuleSubscribed } = require('../utils/admin/getwayServices');
+const isValidAPIKey = require('../utils/admin/tokenService').isValidAPIKey;
+
 const apiGatewayRouter = express.Router();
 
 //Doc
 apiGatewayRouter.use((req, res, next) => {       
-    const isValidKey = isValidAPIKey();
-
-    if (!isValidKey || !isSubscribed) {
+    if (!isValidAPIKey() || !isSubscribed()) {
         res.status(500).send({message: 'Not authorized to use this API system'});
         return;
     }

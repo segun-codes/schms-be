@@ -26,7 +26,8 @@ const schoolSchema = async () => {
                         table.string('address').notNullable();  
                         table.integer('last_student_no');  // used to track student number already issued out  
                         table.integer('last_employee_no'); // used to track employee number already issued out  
-                        table.integer('last_parent_no');   // used to track parent number already issued out 
+                        table.integer('last_parent_no');   // used to track parent number already issued out
+                        table.bigint('client_id').notNullable(); 
 
                         console.log('schools schema setup successful');    
                     });

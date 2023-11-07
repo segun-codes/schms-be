@@ -14,6 +14,7 @@ const writeSchool = async (school) => {
         last_student_no: school.lastStudentNo, 
         last_employee_no: school.lastEmployeeNo, 
         last_parent_no: school.lastParentNo, 
+        client_id: school.clientId
     };  
     
     const writeStatus = await performWrite(tableName, schoolData, 'school');

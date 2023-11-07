@@ -1,6 +1,14 @@
 # schms-be
 This is a school management. 
 It incorporates facility and features to simplify and automate business management process in elementary and secondary schools.
+Note, this readMe file will be cleaned-up into proper format down the line. For now, it's serving the purpose of scribblesheet for the use of the developer
+
+
+# To do
+1. Write test for all endpoints and util functions
+2. Implement constraints to achieve the underlisted "sequence of setup" 
+
+# SCRIBBLESHEET SECTION - THE FOLLOWING ARE DESIGN THOUGHTS AND CONSIDERATION
 
 # EXPECTED FEATURES
 ## Basic module
@@ -17,7 +25,16 @@ It incorporates facility and features to simplify and automate business manageme
 1. Online exam rendering and automatic marking 
 2.
 
-## 
+### 
+
+# Sequence of setup
+Adhere to the sequence below to rig-up the school management system
+1. Create school
+2. Create session
+3. Create term
+4. ...
+5. ..
+
 
 
 # Acronyms Explained
@@ -39,21 +56,28 @@ You will need to update/create the following files:
 5. update the schemaSetup source file
 
 # ID Generation Format
+## Anatomy of Student ID
 "studentId": "NLS20231001", 
 SSYYYYLTNNNN - 
-SS     - two letters from school name
+SSS     - two letters from school name
 YYYY   -  year of admission
 T      -  term 
-NNNN  - a serial number; this number restarts from one after end of each year; this means a maximum of 9999students can be onboarded per term 
+NNNN   - a serial number; this number restarts from one after end of each year; this means a maximum of 9999students can be onboarded per term 
+
+## Anatomy of Parent ID
+"parentId": 
+
+## Anatomy of Student ID
+
+
+## Anatomy of API Key (tentative)
+XXXXXXXXXYYYYYYZZZMMM
+XXXXXXXXX - 9-alphanumeric characters, randomly generated
+YYYYYY - 
+ZZZ - 3-letters, it must represent the  
+
 
 
 # Subfolder "Admin"
 Contains services that is shareable among many schools subscribed to the platform
 
-# Sequence of setup
-Adhere to the sequence below to rig-up the school management system
-1. Create school
-2. Create session
-3. Create term
-4. ...
-5. ..

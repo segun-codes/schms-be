@@ -1,6 +1,3 @@
-const isValidAPIKey = () => {
-    return true;
-};
 
 const isLogin = () => {
     // placeholder
@@ -19,7 +16,6 @@ const getModuleSubscribed = () => {
 
 
 module.exports = {
-    isValidAPIKey,
     isLogin,
     isSubscribed,
     getModuleSubscribed

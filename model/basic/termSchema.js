@@ -16,9 +16,8 @@ const termSchema = async () => {
             try {
                 await mysqlConn.schema
                     .createTable('school_terms', (table) => { 
-                        table.primary(['id', 'term_id']); 
-                        table.increments('id'); 
-                        table.string('term_id').notNullable();      
+                        table.primary(['term_id']); // can only be 1, 2 or 3 for now
+                        table.increments('term_id');      
                         table.string('term').notNullable(); // accepts "first", "second", "third" (i.e., first-term, second-term and third-term) - limit what valuable than can be entered here???
                         table.string('session_year').notNullable(); // eventually this should be extracted from "academic_sessions" table
                         table.string('comment').notNullable();         
