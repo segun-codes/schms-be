@@ -19,7 +19,7 @@ const getDBConnection = async () => {
 const makeFieldUnique = async (tableName, field) => {
     try {
         await mysqlConn.schema.alterTable(tableName, (t) => {
-            !Array.isArray(field) ?  t.unique(field) : t.unique([field[0], field[1]]);
+            t.unique(field);
         });
     } catch(err) {
         if (err.code === 'ER_DUP_ENTRY') {

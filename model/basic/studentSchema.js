@@ -16,8 +16,7 @@ const studentSchema = async () => {
             try {
                 await mysqlConn.schema
                     .createTable('students', (table) => { 
-                        table.primary(['id', 'student_id']); 
-                        table.increments('id'); 
+                        table.primary(['student_id']); 
                         table.string('student_id').notNullable();      
                         table.string('first_name').notNullable();
                         table.string('middle_name').notNullable();
@@ -31,14 +30,13 @@ const studentSchema = async () => {
                         table.date('expected_grad_date').notNullable();             // use date data type later
                         table.string('status').notNullable();              // three possibilites - active, graduated, exited; "exited" means student left the school without completing program) 
                         table.string('class_id').notNullable();
-                        table.string('teacher_id').notNullable();     // equivalent to staff_id for a teacher
-                        table.string('minder_id').nullable();  
+                        table.string('teacher_id');     // equivalent to staff_id for a teacher
+                        table.string('minder_id');  
                         table.string('parent_id').notNullable();         
 
                         console.log('Students Schema setup successful');    
                     });
-                await makeFieldUnique('students', 'student_id');
-                console.log('control got here...');
+                await makeFieldUnique('students', ['first_name', 'middle_name', 'last_name']);
             } catch(err) {
                 throw err;
             }

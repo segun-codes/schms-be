@@ -4,8 +4,7 @@ const studentSchema = require('../basic/studentSchema').studentSchema;
 const subjectSchema = require('../basic/subjectSchema').subjectSchema;
 const curriculumSchema = require('../basic/curriculumSchema').curriculumSchema;
 const classroomSchema = require('../basic/classroomSchema').classroomSchema;
-const studentAddressSchema = require('../basic/studentAddressSchema').studentAddressSchema;
-const employeeAddressSchema = require('../basic/employeeAddressSchema').employeeAddressSchema;
+const addressSchema = require('../basic/addressSchema').addressSchema;
 const parentSchema = require('../basic/parentSchema').parentSchema;
 const employeeSchema = require('../basic/employeeSchema').employeeSchema;
 const schoolSchema = require('../admin/schoolSchema').schoolSchema;
@@ -34,11 +33,8 @@ const setUpSchema = async (tableName) => {
             case 'classrooms': 
                 await classroomSchema();
                 break; 
-            case 'student_addresses': 
-                await studentAddressSchema();
-                break;
-            case 'employee_addresses': 
-                await employeeAddressSchema();
+            case 'addresses': 
+                await addressSchema();
                 break;
             case 'parents':
                 await parentSchema();

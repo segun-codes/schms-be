@@ -2,8 +2,10 @@ const mysqlConn = require('../../utils/dbConnection').mysqlConn;
 const isTableExist = require('../model-utils/schemaUtils').isTableExist;
 const makeFieldUnique = require('../model-utils/schemaUtils').makeFieldUnique;
 const getDBConnection = require('../model-utils/schemaUtils').getDBConnection;
+
+
 /**
- * 
+ *  This schema is for the table that stores top-level information about each client (i.e., a school)  
  */
 
 const schoolSchema = async () => { 
@@ -27,6 +29,7 @@ const schoolSchema = async () => {
                         table.integer('last_student_no');  // used to track student number already issued out  
                         table.integer('last_employee_no'); // used to track employee number already issued out  
                         table.integer('last_parent_no');   // used to track parent number already issued out
+                        table.integer('last_address_no');   // used to track parent number already issued out
                         table.bigint('client_id').notNullable(); 
 
                         console.log('schools schema setup successful');    

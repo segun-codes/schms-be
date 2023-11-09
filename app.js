@@ -9,8 +9,7 @@ const schlTermRouter = require('./routes/basic-sch-mgnt/term');
 const schoolSubjectRouter = require('./routes/basic-sch-mgnt/subject');
 const classroomRouter = require('./routes/basic-sch-mgnt/classroom');
 const schoolCurriculumRouter = require('./routes/basic-sch-mgnt/curriculum');
-const studentAddressRouter = require('./routes/basic-sch-mgnt/studentAddress');
-const employeeAddressRouter = require('./routes/basic-sch-mgnt/employeeAddress');
+const addressRouter = require('./routes/basic-sch-mgnt/address');
 const parentRouter = require('./routes/basic-sch-mgnt/parent');
 const schoolRouter = require('./routes/admin/school');
 
@@ -26,8 +25,7 @@ schmsApp.use('/api/v1/employees/', employeeRouter);
 schmsApp.use('/api/v1/subjects/', schoolSubjectRouter); 
 schmsApp.use('/api/v1/curricula/', schoolCurriculumRouter);
 schmsApp.use('/api/v1/classrooms/', classroomRouter);
-schmsApp.use('/api/v1/stdaddresses/', studentAddressRouter);
-schmsApp.use('/api/v1/empaddresses/', employeeAddressRouter);
+schmsApp.use('/api/v1/addresses/', addressRouter);
 schmsApp.use('/api/v1/parents/', parentRouter);
 
 schmsApp.listen(process.env.PORT || 3000);

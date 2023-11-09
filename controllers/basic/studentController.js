@@ -1,5 +1,5 @@
 const mysqlConn = require('../../utils/dbConnection').mysqlConn;
-const idGenerationService = require('../../utils/idGenerationService');
+const generateStudentId = require('../../utils/idGenerationService').generateNextId;
 const getClientId = require('../../utils/admin/tokenService').getClientId;
 const { performWrite, performRead, performReadAll, performDelete, performUpdate } = require('../../utils/dbOperations-one');
 
@@ -8,17 +8,18 @@ const tableName = 'students';
 const itemToBeFetched = 'student';
 
 const writeStudent = async (studentData) => {
+    const schlTableName = 'schools';
     const targetField = 'last_student_no';
     const targetFieldAcronym = 'name_acronym';
-    const apiToken = studentData.apiToken;
+    const apiKey = studentData.apiKey;
     const sessYear = studentData.sessYear; // to be provided in a UI drop-down box whose entries are fetched from the "Sessions" table
     const termId = studentData.termId;     // to be provided in a UI drop-down box whose entries are fetched from the "Sessions" table
     
-    const clientId = getClientId(apiToken); // api token ships with each request
-    const schlAcronymObject= await performRead('schools', 'school acronym', { client_id: clientId }, [targetFieldAcronym]);  
-    const schlAcronym = schlAcronymObject.payload[0].name_acronym
+    const clientId = getClientId(apiKey); // api token ships with each request
+    const schlAcronymObject= await performRead(schlTableName, 'school acronym', { client_id: clientId }, [targetFieldAcronym]);  
+    const schlAcronym = schlAcronymObject.payload[0].name_acronym;
     const schlData = { schlAcronym, sessYear, termId };
-    const studentId = await idGenerationService.generateId(clientId, targetField, schlData); //schoolAcronym, targetField, { client, currSessYear, currSchTerm }
+    const studentId = await generateStudentId(targetField, clientId, schlData);
 
     const student = { 
         student_id: studentId, 

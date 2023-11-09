@@ -3,7 +3,6 @@ This is a school management.
 It incorporates facility and features to simplify and automate business management process in elementary and secondary schools.
 Note, this readMe file will be cleaned-up into proper format down the line. For now, it's serving the purpose of scribblesheet for the use of the developer
 
-
 # To do
 1. Write test for all endpoints and util functions
 2. Implement constraints to achieve the underlisted "sequence of setup" 
@@ -29,7 +28,7 @@ Note, this readMe file will be cleaned-up into proper format down the line. For 
 
 # Sequence of setup
 Adhere to the sequence below to rig-up the school management system
-1. Create school
+1. Create school - you must setup seed number (in format 0, 00, 000 or 0000 only) for last_student_no, last_employee_no, last_parent_no, . Next numbers will be generated from there
 2. Create session
 3. Create term
 4. ...

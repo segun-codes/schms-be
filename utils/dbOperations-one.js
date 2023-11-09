@@ -140,9 +140,13 @@ const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria) => 
     const schlClassroomPropertySet = ['classId', 'className', 'purpose', 'periodOfUse'];
     const subjectPropertySet = ['subjectId', 'curriculumId', 'name', 'description', 'objective', 'level'];
     const schlCurriculumPropertySet = ['curriculumId', 'weekNo', 'topic', 'objective', 'details', 'comment'];
-    const stdAddressPropertySet = ['stdAddressId', 'studentId', 'houseNo', 'streetLineOne', 'streetLineTwo', 'townCity', 'stateRegion', 'country', 'postCode'];
+    const addressPropertySet = ['addressId', 'empId', 'studentId', 'houseNo', 'streetLineOne', 'streetLineTwo', 'townCity', 'stateRegion', 'country', 'postCode'];
     const parentPropertySet = ['parentId', 'firstName', 'lastName', 'phone', 'email', 'photoUrl'];
-    const schoolPropertySet = ['name', 'nameAcronym', 'type', 'address', 'lastStudentNo', 'lastEmployeeNo', 'lastParentNo', 'clientId'];
+    const schoolPropertySet = [
+        'name', 'nameAcronym', 'type', 
+        'address', 'lastStudentNo', 'lastEmployeeNo', 
+        'lastParentNo', 'lastAddressNo', 'clientId'
+    ];
     const employeePropertySet = [
         'empId', 'firstName', 'middleName', 'lastName', 
         'dob', 'photoUrl',  'employmentDate', 'statusOfEmployment', 
@@ -154,9 +158,6 @@ const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria) => 
         'photoUrl', 'addressId', 'dateOfFirstResumption', 
         'expectedGradDate', 'status', 'classId', 'teacherId', 'minderId', 'parentId' 
     ];
-    const empAddressPropertySet = stdAddressPropertySet;
-    empAddressPropertySet[0] = 'empAddressId';
-    empAddressPropertySet[1] = 'empId';
     
     console.log('tableName: ', tableName);
 
@@ -182,11 +183,8 @@ const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria) => 
         case 'classrooms': 
             targetPropertySet = schlClassroomPropertySet;
             break; 
-        case 'student_addresses':  
-            targetPropertySet = stdAddressPropertySet;
-            break;
-        case 'employee_addresses':  
-            targetPropertySet = empAddressPropertySet;
+        case 'addresses':  
+            targetPropertySet = addressPropertySet;
             break;
         case 'parents':
             targetPropertySet = parentPropertySet;

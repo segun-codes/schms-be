@@ -35,7 +35,8 @@ employeeRouter.post('/', async (req, res) => {
     
     res.status(wStatus.code).send({ 
         status: wStatus.status, 
-        message: wStatus.message 
+        message: wStatus.message, 
+        newEmployeeId: wStatus.employeeId
     });
 });
 

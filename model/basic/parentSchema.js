@@ -16,8 +16,7 @@ const parentSchema = async () => {
             try {
                 await mysqlConn.schema
                     .createTable('parents', (table) => { 
-                        table.primary(['id', 'parent_id']); 
-                        table.increments('id'); 
+                        table.primary(['parent_id']); 
                         table.string('parent_id').notNullable();      
                         table.string('first_name').notNullable();
                         table.string('last_name').notNullable();
@@ -27,7 +26,7 @@ const parentSchema = async () => {
 
                         console.log('Parents Schema setup successful');    
                     });
-                await makeFieldUnique('parents', 'parent_id');
+                await makeFieldUnique('parents', ['first_name', 'last_name']);
                 console.log('control got here...');
             } catch(err) {
                 throw err;

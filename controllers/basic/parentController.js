@@ -1,14 +1,20 @@
 const mysqlConn = require('../../utils/dbConnection').mysqlConn;
 const { performWrite, performRead, performReadAll, performDelete, performUpdate } = require('../../utils/dbOperations-one');
-const errorMessages = require('../../config/errorConfig').errorMessages;
+const getClientId = require('../../utils/admin/tokenService').getClientId;
+const generateEmployeeId = require('../../utils/idGenerationService').generateNextId;
 
 
 const tableName = 'parents';
 const itemToBeFetched = 'parent';
 
 const writeParent = async (parentData) => {
+    const targetField = 'last_parent_no';
+    const apiKey = parentData.apiKey;
+    const clientId = getClientId(apiKey);
+    const parentId = await generateEmployeeId(targetField, clientId);
+
     const parent = { 
-        parent_id: parentData.parentId, 
+        parent_id: parentId, 
         first_name: parentData.firstName, 
         last_name: parentData.lastName, 
         phone: parentData.phone, 
@@ -18,6 +24,10 @@ const writeParent = async (parentData) => {
     
     const writeStatus = await performWrite(tableName, parent, 'parent');
     
+    if (writeStatus.code === 201) {
+        writeStatus.parentId = parentId;
+    }
+
     return writeStatus;
 };
 

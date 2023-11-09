@@ -1,14 +1,25 @@
 const mysqlConn = require('../../utils/dbConnection').mysqlConn;
+const getClientId = require('../../utils/admin/tokenService').getClientId;
+const generateAddressId = require('../../utils/idGenerationService').generateNextId;
 const { performWrite, performRead, performReadAll, performDelete, performUpdate } = require('../../utils/dbOperations-one');
 
 
-const tableName = 'employee_addresses';
+const tableName = 'addresses';
 const itemToBeFetched = 'address';
 
 const writeAddress = async (addressData) => {
+    const targetField = 'last_address_no';
+    const apiKey = addressData.apiKey;
+    const clientId = getClientId(apiKey);
+    const addressId = await generateAddressId(targetField, clientId);
+
+    console.log('clientId: ', clientId);
+    console.log('addressId: ', addressId);
+
     const address = { 
-        emp_address_id: addressData.empAddressId,
+        address_id: addressId,
         emp_id: addressData.empId,
+        student_id: addressData.studentId,
         house_no: addressData.houseNo, 
         street_line_one: addressData.streetLineOne, 
         street_line_two: addressData.streetLineTwo, 
@@ -24,14 +35,15 @@ const writeAddress = async (addressData) => {
 };
 
 const retrieveAddress = async (addressId) => {
-    const address = await performRead(tableName, itemToBeFetched, { emp_address_id: addressId });
+    const address = await performRead(tableName, itemToBeFetched, { address_id: addressId });
     return address;
 };
 
 const retrieveAllAddresses = async () => {
     const fieldsToSelect = [
-        'emp_address_id',
-        'emp_id', 
+        'address_id',
+        'emp_id',
+        'student_id', 
         'house_no', 
         'street_line_one', 
         'street_line_two', 
@@ -48,7 +60,7 @@ const retrieveAllAddresses = async () => {
 
 const removeAddress = async (addressId) => {
     const itemToDelete = itemToBeFetched;
-    const queryCriteria = { emp_address_id: addressId };
+    const queryCriteria = { address_id: addressId };
 
     const removeStatus = await performDelete(tableName, itemToDelete, queryCriteria);
 
@@ -57,7 +69,7 @@ const removeAddress = async (addressId) => {
 
 const updateAddress = async (addressToUpdate) => {
     const itemName = itemToBeFetched;
-    const queryCriteria = { emp_address_id: addressToUpdate.empAddressId };
+    const queryCriteria = { address_id: addressToUpdate.addressId };
 
     const updateStatus = await performUpdate(tableName, itemName, addressToUpdate, queryCriteria);
 

@@ -1,14 +1,21 @@
 const mysqlConn = require('../../utils/dbConnection').mysqlConn;
+const idGenerationService = require('../../utils/idGenerationService');
+const generateEmployeeId = require('../../utils/idGenerationService').generateNextId;
+const getClientId = require('../../utils/admin/tokenService').getClientId;
 const { performWrite, performRead, performReadAll, performDelete, performUpdate } = require('../../utils/dbOperations-one');
-const errorMessages = require('../../config/errorConfig').errorMessages;
 
 
 const tableName = 'employees';
 const itemToBeFetched = 'employee';
 
 const writeEmployee = async (employeeData) => {
+    const targetField = 'last_employee_no';
+    const apiKey = employeeData.apiKey;
+    const clientId = getClientId(apiKey);
+    const employeeId = await generateEmployeeId(targetField, clientId);
+
     const employee = { 
-        emp_id: employeeData.empId, 
+        emp_id: employeeId, 
         first_name: employeeData.firstName, 
         middle_name: employeeData.middleName, 
         last_name: employeeData.lastName, 
@@ -23,6 +30,10 @@ const writeEmployee = async (employeeData) => {
     };  
     
     const writeStatus = await performWrite(tableName, employee, 'employee');
+
+    if (writeStatus.code === 201) {
+        writeStatus.employeeId = employeeId;
+    }
     
     return writeStatus;
 };

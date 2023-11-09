@@ -16,9 +16,8 @@ const employeeSchema = async () => {
             try {
                 await mysqlConn.schema
                     .createTable('employees', (table) => { 
-                        table.primary(['id', 'emp_id']); 
-                        table.increments('id'); 
-                        table.string('emp_id').notNullable(); // change data type this to equivalent of long      
+                        table.primary(['emp_id']);  
+                        table.bigint('emp_id').notNullable(); // change data type this to equivalent of long      
                         table.string('first_name').notNullable(); // accepts "first", "second", "third" (i.e., first-term, second-term and third-term) - limit what valuable than can be entered here???
                         table.string('middle_name').notNullable(); 
                         table.string('last_name').notNullable(); // eventually this should be extracted from "academic_sessions" table
@@ -33,13 +32,13 @@ const employeeSchema = async () => {
 
                         console.log('employee schema setup successful');    
                     });
-                
-                await makeFieldUnique('employees', 'emp_id'); 
+
+                await makeFieldUnique('employees', ['first_name', 'last_name', 'middle_name']); 
             } catch(err) {
                 throw err;
             }
         } else {
-            console.log('Existing employee schema found, no need to create another');
+            console.log('Existing employee-schema found, no need to create another');
         }                
     }
 };
