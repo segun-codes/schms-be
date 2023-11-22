@@ -16,12 +16,11 @@ const classroomSchema = async () => {
             try {
                 await mysqlConn.schema
                     .createTable('classrooms', (table) => { 
-                        table.primary(['id', 'class_id']); 
-                        table.increments('id'); 
+                        table.primary(['class_id']); 
                         table.string('class_id').notNullable();      
                         table.string('class_name').notNullable(); 
                         table.string('purpose').notNullable(); 
-                        table.string('period_of_use');         
+                        table.string('period_of_use');    // data type to be reviewed     
 
                         console.log('classrooms schema setup successful');    
                     });

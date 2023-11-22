@@ -1,5 +1,8 @@
 const { mysqlConn } = require('../../utils/dbConnection');
+const generateCurriculumId = require('../../utils/idGenerationService').generateNextId;
+const getClientId = require('../../utils/admin/tokenService').getClientId;
 const { performWrite, performRead, performReadAll, performDelete, performUpdate } = require('../../utils/dbOperations-one');
+
 
 
 
@@ -8,8 +11,13 @@ const itemToBeFetched = 'curriculum';
 const fieldsToSelect = ['curriculum_id', 'week_no', 'topic', 'objective', 'details', 'comment'];
 
 const writeSchlCurriculum = async (curriculum) => {
+    const targetField = 'last_curriculum_no';
+    const apiKey = curriculum.apiKey;
+    const clientId = getClientId(apiKey);
+    const curriculumId = await generateCurriculumId(targetField, clientId);
+
     const curriculumData = { 
-        curriculum_id: curriculum.curriculumId, 
+        curriculum_id: curriculumId, 
         week_no: curriculum.weekNo, 
         topic: curriculum.topic, 
         objective: curriculum.objective, 
@@ -17,6 +25,10 @@ const writeSchlCurriculum = async (curriculum) => {
         comment: curriculum.comment 
     };  
     const writeStatus = await performWrite(tableName, curriculumData, 'curriculum');
+
+    if (writeStatus.code === 201) {
+        writeStatus.curriculumId = curriculumId;
+    }
 
     return writeStatus;
 };

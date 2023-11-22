@@ -14,6 +14,11 @@ const writeSchool = async (school) => {
         last_employee_no: school.lastEmployeeNo, 
         last_parent_no: school.lastParentNo, 
         last_address_no: school.lastAddressNo,
+        last_classroom_no: school.classroomNo,        // place value 0 - 000 (e.g., 0, 00, 000)
+        // last_curriculum_no: school.curriculumNo,
+        // last_session_year: school.sessionYear,      // in format YYYY-YYYY (e.g., 2020-2021)
+        // last_subject_no: school.subjectNo,
+        // last_term_no: school.termNo,
         client_id: school.clientId
     };  
     

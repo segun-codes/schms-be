@@ -18,7 +18,7 @@ const writeStudent = async (studentData) => {
     const clientId = getClientId(apiKey); // api token ships with each request
     const schlAcronymObject= await performRead(schlTableName, 'school acronym', { client_id: clientId }, [targetFieldAcronym]);  
     const schlAcronym = schlAcronymObject.payload[0].name_acronym;
-    const schlData = { schlAcronym, sessYear, termId };
+    const schlData = { schlAcronym, sessYear, termId }; 
     const studentId = await generateStudentId(targetField, clientId, schlData);
 
     const student = { 

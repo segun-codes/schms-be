@@ -145,7 +145,8 @@ const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria) => 
     const schoolPropertySet = [
         'name', 'nameAcronym', 'type', 
         'address', 'lastStudentNo', 'lastEmployeeNo', 
-        'lastParentNo', 'lastAddressNo', 'clientId'
+        'lastParentNo', 'lastAddressNo', 'lastClassroomNo', 'clientId',
+        'lastCurriculumNo', 
     ];
     const employeePropertySet = [
         'empId', 'firstName', 'middleName', 'lastName', 
@@ -213,7 +214,7 @@ const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria) => 
             const updatedRowCount = await mysqlConn(tableName).where(queryCriteria).update(updateObject);
 
             if (updatedRowCount) {
-                console.log('Update completed');
+                //console.log('Update completed');
                 return { code: 201, status: 'success', message: `${itemName} updated`};
             }
         } catch(err) {

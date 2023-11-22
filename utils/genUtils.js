@@ -1,3 +1,5 @@
+
+
 // convert firstName to first_name
 const convertToSnakeCase = (property) => {    
     //g => sticky flag, tells "replace()" to replace more than once
@@ -33,5 +35,5 @@ const toCamelCase = (property) => {
 
 module.exports = {
     convertToSnakeCase,
-    toCamelCase
+    toCamelCase,
 };

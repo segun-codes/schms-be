@@ -26,12 +26,16 @@ const schoolSchema = async () => {
                         table.string('name_acronym').notNullable();      //must be three letter e.g., NFL - For Nafowa Little Angels School     
                         table.string('type').notNullable();              //possible values: nursery, nurs_primary, nurs_primary_secondary, secondary   
                         table.string('address').notNullable();  
-                        table.integer('last_student_no');  // used to track student number already issued out  
-                        table.integer('last_employee_no'); // used to track employee number already issued out  
-                        table.integer('last_parent_no');   // used to track parent number already issued out
-                        table.integer('last_address_no');   // used to track parent number already issued out
-                        table.bigint('client_id').notNullable(); 
-
+                        table.integer('last_student_no');    // used to track student number already issued out  
+                        table.integer('last_employee_no');   // used to track employee number already issued out  
+                        table.integer('last_parent_no');     // used to track parent number already issued out
+                        table.integer('last_address_no');    // used to track parent number already issued out
+                        table.integer('last_classroom_no');  // place value 0 - 0000 
+                        table.integer('last_curriculum_no');
+                        // table.string('last_session_year');      // in format YYYY-YYYY (e.g., 2020-2021)
+                        // table.string('last_subject_no');
+                        // table.string('last_term_no');
+                        table.bigint('client_id'); 
                         console.log('schools schema setup successful');    
                     });
                 

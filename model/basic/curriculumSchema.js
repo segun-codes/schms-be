@@ -16,14 +16,13 @@ const curriculumSchema = async () => {
             try {
                 await mysqlConn.schema
                     .createTable('curricula', (table) => { 
-                        table.primary(['id', 'curriculum_id']); 
-                        table.increments('id'); 
+                        table.primary(['curriculum_id']); 
                         table.integer('curriculum_id').notNullable(); // curriculum id, starts from 1001, 1002, 1003...etc
                         table.integer('week_no').notNullable(); // e.g., curriculum organizes teachings into week 1, week 2... week 12; possible values: 1, 2, 3
                         table.string('topic').notNullable();
                         table.string('objective').notNullable();
                         table.string('details').notNullable();
-                        table.string('comment').notNullable();        
+                        table.string('comment');        
 
                         console.log('Curriculum schema setup successful');    
                     });

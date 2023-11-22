@@ -4,8 +4,14 @@ const getDBConnection = require('../model-utils/schemaUtils').getDBConnection;
 const makeFieldUnique = require('../model-utils/schemaUtils').makeFieldUnique;
 
 
-const studentSchema = async () => { 
-    const conn = await getDBConnection();
+const studentSchema = async (connection = null) => {
+    let conn;
+
+    if (conn != null) { // required to support low-level testing
+        conn = connection;
+    } else {
+        conn = await getDBConnection();
+    }
 
     if (conn) {
         console.log('MySQL DB Connected');

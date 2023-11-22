@@ -10,6 +10,7 @@ schoolCurriculumRouter.post('/', async (req, res) => {
     res.status(curriculumWriteStatus.code).send({        
         status: curriculumWriteStatus.status, 
         message: curriculumWriteStatus.message,
+        curriculumId: curriculumWriteStatus.curriculumId,
     });
 });
 
@@ -43,7 +44,6 @@ schoolCurriculumRouter.delete('/:curriculumId', async (req, res) => {
         message: schlCurriculumData.message 
     });
 });
-
 
 schoolCurriculumRouter.patch('/', async (req, res) => {
     const curriculumToUpdate = req.body;

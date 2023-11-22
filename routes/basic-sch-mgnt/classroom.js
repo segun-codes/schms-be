@@ -10,6 +10,7 @@ schoolClassroomRouter.post('/', async (req, res) => {
     res.status(classroomWriteStatus.code).send({        
         status: classroomWriteStatus.status, 
         message: classroomWriteStatus.message,
+        classId: classroomWriteStatus.classId,
     });
 });
 

@@ -17,6 +17,9 @@ const generateNextId = async (targetField, clientId, schlData = null) => {
     const queryCriteria = { client_id: clientId };
     const fieldsToSelect = [targetField];
     const tempObj = await dbActions.performRead(tableName, message, queryCriteria, fieldsToSelect);
+
+    //console.log('tempObj: ', tempObj);
+
     let prevNo = extractPrevIdNumber(targetField, tempObj); 
       
     if (schlData) {
@@ -42,7 +45,7 @@ const generateNextId = async (targetField, clientId, schlData = null) => {
  * @param {*} tempObj: lightweight object, used to access the desired targetField 
  * @returns 
  */
-const extractPrevIdNumber = (targetField, tempObj) => {
+const extractPrevIdNumber = (targetField, tempObj) => { //targetField - last_student_no, tempObj
     let prevId;
 
     switch(targetField) {
@@ -57,6 +60,18 @@ const extractPrevIdNumber = (targetField, tempObj) => {
             break;
         case 'last_address_no':
             prevId = tempObj.payload[0].last_address_no;
+            break;
+        case 'last_classroom_no': 
+            prevId = tempObj.payload[0].last_classroom_no;
+            break;
+        case 'last_curriculum_no': 
+            prevId = tempObj.payload[0].last_curriculum_no;
+            break;
+        case 'last_session_year': 
+            prevId = tempObj.payload[0].last_session_year;
+            break;
+        case 'last_subject_no': 
+            prevId = tempObj.payload[0].last_subject_no;
             break;
     }
 
@@ -94,17 +109,17 @@ const createStudentId = (schlData) => {
  * @returns '2022', given the above example 
  */
 const getLowerBoundYear = (sessYear) => {
-    console.log('sessYear: ', sessYear);
-    
+    //console.log('sessYear: ', sessYear);    
     return sessYear.split('-')[0];
 };
 
 
 
 module.exports = {
-    generateNextId
-    // generateStudentId,
-    // generateEmployeeId
+    getLowerBoundYear,
+    createStudentId,
+    extractPrevIdNumber,
+    generateNextId,
 }
 
 
