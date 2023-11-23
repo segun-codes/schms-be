@@ -1,65 +1,50 @@
 const mysqlConn = require('../../utils/dbConnection').mysqlConn;
 
-const studentSchema = require('../../model/basic/studentSchema').studentSchema;
 const schoolSchema = require('../../model/admin/schoolSchema').schoolSchema;
 const { performWrite, performRead, performReadAll, performDelete, performUpdate } = require('../../utils/dbOperations-one');
+const { schData } = require('../utils-test');
+
 
 
 describe('Database access operations', () => {
     const tableName1 = 'schools';
     const tableName2 = 'students';
     
-    const studentData =  {
-        studentId: 'NLS202011001',
-        sessYear: '2020-2021',
-        termId: 1,
-        firstName: 'Lanre',
-        middleName: 'Gbenga',
-        lastName: 'Amadi',
-        dob: '1994-09-25',
-        genotype: 'AA',
-        bloodGroup: 'B+',
-        photoUrl: 'http://pix.com/nafowa-pix-collection/lanre.jpeg',
-        addressId: '1001',
-        dateOfFirstResumption: '2023-12-04',
-        expectedGradDate: '2027-04-12',
-        status: 'active',
-        classId: 'g1',  
-        teacherId: 'NLS202310001T',
-        minderId: 'NLS202310001M',
-        parentId: 'NLS202310001P'
-    };
-
-    beforeAll(async () => {
-        // setup "schools" table
-        const schData =  {
-            name: 'Nafowa Little Angels School',
-            name_acronym: 'NLS',
-            type: 'nursery',
-            address: '104 Battalion Division',
-            last_student_no: 1000,
-            last_employee_no: 1001,
-            last_parent_no : 1002,
-            last_address_no: 1003,
-            last_classroom_no: 100,
-            client_id: 123456789
-          };
-              
+    beforeAll(async () => {             
         await schoolSchema();
-        await mysqlConn(tableName1).insert(schData); // await mysqlConn(tableName).insert(dataToInsert);
+        await mysqlConn(tableName1).insert(schData); 
     });
 
     // drop table and close db connection handle
-    // afterAll(async () => {
-    //     await mysqlConn.schema.dropTable(tableName1);
-    //     await mysqlConn.schema.dropTable(tableName2);
-    //     mysqlConn.destroy();
-    // });
+    afterAll(async () => {
+        await mysqlConn.schema.dropTable(tableName1);
+        await mysqlConn.schema.dropTable(tableName2);
+        await mysqlConn.destroy();
+        console.log('Inside dbOps.test: DB connection handle destroyed...');
+    });
 
-    //tableName, itemData, itemName
-    //1.
+    // 1.
     test('expect code 201 returned after write to db', async () => {
-        const message = 'student';
+        const message = 'students';
+        const studentData =  {
+            student_id: 'NLS202011001',
+            first_name: 'Lanre',
+            middle_name: 'Gbenga',
+            last_name: 'Amadi',
+            dob: '1994-09-25',
+            genotype: 'AA',
+            blood_group: 'B+',
+            photo_url: 'http://pix.com/nafowa-pix-collection/lanre.jpeg',
+            address_id: '1001',
+            date_of_first_resumpt: '2023-12-04',
+            expected_grad_date: '2027-04-12',
+            status: 'active',
+            class_id: 'g1',  
+            teacher_id: 'NLS202310001T',
+            minder_id: 'NLS202310001M',
+            parent_id: 'NLS202310001P'
+        }; 
+
         const response = await performWrite(tableName2, studentData, message);
         expect(response.code).toBe(201);
     });

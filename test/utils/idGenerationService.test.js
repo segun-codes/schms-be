@@ -2,6 +2,7 @@ const { describe, expect, test, beforeAll, afterAll } = require('@jest/globals')
 
 const mysqlConn = require('../../utils/dbConnection').mysqlConn;
 const schoolSchema = require('../../model/admin/schoolSchema').schoolSchema;
+const { schData } = require('../utils-test');
 const { getLowerBoundYear, createStudentId, extractPrevIdNumber, generateNextId } = require('../../utils/idGenerationService');
 
 
@@ -10,34 +11,16 @@ describe('ID Generation Module', () => {
     const tableName = 'schools';
 
     // setup "schools" table
-    beforeAll(async () => {
-        const schData =  {
-            name: 'Nafowa Little Angels School',
-            name_acronym: 'NLS',
-            type: 'nursery',
-            address: '104 Battalion Division',
-            last_student_no: 1000,
-            last_employee_no: 1001,
-            last_parent_no : 1002,
-            last_address_no: 1003,
-            last_classroom_no: 100,
-            client_id: 123456789
-          };
-
-        try {            
-            await schoolSchema();
-            await mysqlConn(tableName).insert(schData);
-
-        } catch(err) { 
-            console.log(`Inserting to table ${tableName} failed`);
-        }
+    beforeAll(async () => {         
+        await schoolSchema();
+        await mysqlConn(tableName).insert(schData);
     });
 
     // drop table and close db connection handle
     afterAll(async () => {
         await mysqlConn.schema.dropTable(tableName);
-        mysqlConn.destroy();
-        console.log('End of first set of testing...');
+        await mysqlConn.destroy();
+        console.log('Inside IdGenService.test: DB connection handle destroyed...');
     });
          
     //1. Unit test
@@ -49,7 +32,6 @@ describe('ID Generation Module', () => {
     test('Create Student Id', () => {   
         const schlData = { schlAcronym: 'NLS', sessYear: '2020-2021', termId: 1 };
         expect(createStudentId(schlData)).toBe('NLS202010001');
-
     });
 
     //3. Unit test
