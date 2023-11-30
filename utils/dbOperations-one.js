@@ -1,27 +1,27 @@
-const mysqlConn = require('./dbConnection').mysqlConn;
+let mysqlConn = require('./dbConnection').mysqlConn;
 const setUpSchema = require('../model/model-utils/schemaSetup').setUpSchema;
 const convertToSnakeCase = require('../utils/genUtils').convertToSnakeCase;
 const errorMessages = require('../config/errorConfig').errorMessages;
 
 
-const performWrite = async (tableName, itemData, itemName) => {
-    return await writeToDB(tableName, itemData, itemName);
+const performWrite = async (tableName, itemData, itemName, conn = null) => {
+    return await writeToDB(tableName, itemData, itemName, conn);
 };
 
-const performRead = async (tableName, itemName, queryCriteria, fieldsToSelect) => {
-    return await retrieveFromDb(tableName, itemName, queryCriteria, fieldsToSelect);
+const performRead = async (tableName, itemName, queryCriteria, fieldsToSelect, conn = null) => {
+    return await retrieveFromDb(tableName, itemName, queryCriteria, fieldsToSelect, conn);
 };
 
-const performReadAll = async (tableName, itemName, fieldsToSelect) => {
-    return await retrieveAllFromDb(tableName, itemName, fieldsToSelect);
+const performReadAll = async (tableName, itemName, fieldsToSelect, conn = null) => {
+    return await retrieveAllFromDb(tableName, itemName, fieldsToSelect, conn);
 };
 
-const performDelete = async (tableName, itemName, queryCriteria) => {
-    return await deleteItem(tableName, itemName, queryCriteria);  
+const performDelete = async (tableName, itemName, queryCriteria, conn = null) => {
+    return await deleteItem(tableName, itemName, queryCriteria, conn);  
 };
 
-const performUpdate = async (tableName, itemName, itemToUpdate, queryCriteria) => {
-    return await updateItem(tableName, itemName, itemToUpdate, queryCriteria);
+const performUpdate = async (tableName, itemName, itemToUpdate, queryCriteria, conn = null) => {
+    return await updateItem(tableName, itemName, itemToUpdate, queryCriteria, conn);
 };
 
 /**
@@ -32,8 +32,12 @@ const performUpdate = async (tableName, itemName, itemToUpdate, queryCriteria) =
  * @param {*} message - message to be interpolated in error and non-error messages 
  * @returns Object with status update on the write operation
  */
-const writeToDB = async (tableName, dataToInsert, message) => { // tableName = 'school_term', message = 'school term', insertEntries = { session_name: schlSess.sessionName, session_year: schlSess.sessionYear, comment: schlSess.comment}
-    await setUpSchema(tableName);
+const writeToDB = async (tableName, dataToInsert, message, conn) => { // tableName = 'school_term', message = 'school term', insertEntries = { session_name: schlSess.sessionName, session_year: schlSess.sessionYear, comment: schlSess.comment}
+    await setUpSchema(tableName, conn);
+
+    if (conn) {
+        mysqlConn = conn;
+    }
 
     try {
         const insRowCount = await mysqlConn(tableName).insert(dataToInsert);
@@ -61,8 +65,12 @@ const writeToDB = async (tableName, dataToInsert, message) => { // tableName = '
  * @returns Object with status update on the write operation
  */
 
-const retrieveFromDb = async (tableName, itemName, queryCriteria, fieldsToSelect) => {  
-    await setUpSchema(tableName);
+const retrieveFromDb = async (tableName, itemName, queryCriteria, fieldsToSelect = null, conn = null) => {  
+    await setUpSchema(tableName, conn);
+
+    if (conn) {
+        mysqlConn = conn;
+    }
     
     try {
         const retrievedData = await mysqlConn(tableName).where(queryCriteria).select(fieldsToSelect);  
@@ -79,10 +87,14 @@ const retrieveFromDb = async (tableName, itemName, queryCriteria, fieldsToSelect
     return { code: 404, status: 'failed', message: `no ${itemName} data found`, payload: {} }
 };
 
-const retrieveAllFromDb = async (tableName, itemName, fieldsToSelect) => {
-    await setUpSchema(tableName);
+const retrieveAllFromDb = async (tableName, itemName, fieldsToSelect, conn = null) => {
+    await setUpSchema(tableName, conn);
 
     let items = [];
+
+    if (conn) {
+        mysqlConn = conn;
+    }
 
     try {
         const retrievedItems = await mysqlConn.select(fieldsToSelect).from(tableName); 
@@ -102,8 +114,12 @@ const retrieveAllFromDb = async (tableName, itemName, fieldsToSelect) => {
     return { code: 404, status: 'failed', message: `no ${itemName} data found`, payload: {} };
 };
 
-const deleteItem = async (tableName, itemName, queryCriteria) => {
-    await setUpSchema(tableName);
+const deleteItem = async (tableName, itemName, queryCriteria, conn = null) => {
+    await setUpSchema(tableName, conn);
+
+    if (conn) {
+        mysqlConn = conn;
+    }
 
     try {
         const deleteCount = await mysqlConn(tableName).where(queryCriteria).del();
@@ -129,8 +145,8 @@ const deleteItem = async (tableName, itemName, queryCriteria) => {
  * @returns 
  */
 
-const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria) => {
-    console.log('queryCriteria: ', queryCriteria);
+const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria, conn = null) => {
+    //console.log('queryCriteria: ', queryCriteria);
 
     let targetPropertySet;
     let updateObject = {}; // used to construct object in format that knexjs requirement
@@ -160,8 +176,7 @@ const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria) => 
         'expectedGradDate', 'status', 'classId', 'teacherId', 'minderId', 'parentId' 
     ];
     
-    console.log('tableName: ', tableName);
-
+    //console.log('tableName: ', tableName);
     switch(tableName) {
         case 'school_terms': 
             targetPropertySet = schlTermPropertySet;
@@ -195,8 +210,11 @@ const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria) => 
             break;
     }
 
-    await setUpSchema();
+    if (conn) {
+        mysqlConn = conn;
+    }
 
+    await setUpSchema(tableName, mysqlConn);
     //console.log('itemToUpdate: ', itemToUpdate);
     //console.log('targetPropertySet: ', targetPropertySet);
 

@@ -9,8 +9,12 @@ const schoolRouter = express.Router();
 schoolRouter.get('/:schoolId', async (req, res) => {
     const schoolId = req.params.schoolId;
     const school = await schoolController.retrieveSchool(schoolId);
-
-    res.status(school.code).send({ 
+    // res.status(school.code).send({ 
+    //     status: school.status, 
+    //     message: school.message, 
+    //     payload: school.payload 
+    // });
+    res.status(school.code).json({ 
         status: school.status, 
         message: school.message, 
         payload: school.payload 

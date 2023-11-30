@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const apiGatewayRouter = require('./routes/index');
+const apiGatewayRouter = require('./routes/gateway');
 const studentRouter = require('./routes/basic-sch-mgnt/student');
 const employeeRouter = require('./routes/basic-sch-mgnt/employee');
 const schoolSessionRouter = require('./routes/basic-sch-mgnt/schoolSession');
@@ -28,4 +28,5 @@ schmsApp.use('/api/v1/classrooms/', classroomRouter);
 schmsApp.use('/api/v1/addresses/', addressRouter);
 schmsApp.use('/api/v1/parents/', parentRouter);
 
-schmsApp.listen(process.env.PORT || 3000);
+
+module.exports = schmsApp;

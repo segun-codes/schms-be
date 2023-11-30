@@ -7,7 +7,8 @@ const toCamelCase = require('./genUtils').toCamelCase;
  * @param clientId: id that identifies each school registered on table "schools"
  * @param schlData: an object { clientId, schlAcronym, sessYear, termId }. Only required if studentId is to be generated. 
  */
-const generateNextId = async (targetField, clientId, schlData = null) => { 
+const generateNextId = async (targetField, clientId, schlData = null, conn = null) => { 
+    // console.log('Control got here');
     let nextId;
     let itemToUpdate;
     let nextStudentNo;
@@ -16,11 +17,13 @@ const generateNextId = async (targetField, clientId, schlData = null) => {
     const message = 'school';
     const queryCriteria = { client_id: clientId };
     const fieldsToSelect = [targetField];
-    const tempObj = await dbActions.performRead(tableName, message, queryCriteria, fieldsToSelect);
+    const tempObj = await dbActions.performRead(tableName, message, queryCriteria, fieldsToSelect, conn); 
 
     //console.log('tempObj: ', tempObj);
 
     let prevNo = extractPrevIdNumber(targetField, tempObj); 
+
+    console.log('Previous Student No in School Table: ', prevNo);
       
     if (schlData) {
         schlData.prevStudentNo = prevNo;
@@ -34,7 +37,7 @@ const generateNextId = async (targetField, clientId, schlData = null) => {
         itemToUpdate = { [fieldToUpdate]: nextId };
     }
 
-    dbActions.performUpdate(tableName, message, itemToUpdate, queryCriteria);
+    dbActions.performUpdate(tableName, message, itemToUpdate, queryCriteria, conn); 
 
     return nextId;
 };

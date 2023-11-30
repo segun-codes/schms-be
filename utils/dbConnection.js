@@ -1,24 +1,41 @@
-const config = require('../config/dbConfig');
-
 const knex = require('knex');
+const { devConfig, testConfig } = require('../config/dbConfig');
+
+
+
+const devConnection = { 
+    host: devConfig.HOST, port: devConfig.PORT, user: devConfig.USER, 
+    password: devConfig.PASSWORD, database: devConfig.DATABASE 
+};
+
+const testConnection = { 
+    host: testConfig.HOST, port: testConfig.PORT, user: testConfig.USER, 
+    password: testConfig.PASSWORD, database: testConfig.DATABASE 
+};
 
 const mysqlConn = knex({
-    client: config.CLIENT,
-    connection: {
-        host: config.HOST,
-        port: config.PORT,
-        user: config.USER,
-        password: config.PASSWORD,
-        database: config.DATABASE
-    },
+    client: devConfig.CLIENT,
+    connection: devConnection,
     pool: {
         min: 0,
         max: 7,
     }
 });
 
+const mysqlConnTest = knex({
+    client: testConfig.CLIENT,
+    connection: testConnection,
+    pool: {
+        min: 0,
+        max: 7,
+    }
+});
+
+
+
 module.exports = {
-    mysqlConn
+    mysqlConn,
+    mysqlConnTest
 }
 
 

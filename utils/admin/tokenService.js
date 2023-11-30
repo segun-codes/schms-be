@@ -1,20 +1,8 @@
 // REWORK ALL THESE FUNCTIONS LATER
 
 /**
- * Using 1-way hashing algorithm, generates API Key and writes to DB
- * @param apiKeyType: values include USER, ADMIN 
- * @returns 
- */
-
-const generateAPIKey = (apiKeyType) => {};
-
- /**
-  * Using 1-way hashing algorithm, generates bearer's token and writes to DB
-  */
-const generateBearerToken = () => {};
-
-/**
- * 
+ * Use clientId to retrieve apiKey
+ * apiKeyType is to make db query more efficient
  * @param clientId:  
  * @param apiKeyType:  
  * @returns 
@@ -32,31 +20,46 @@ const getAPIKey = (apiKeyType, clientId = null) => {
    return apiKey;
 }
 
-const getBearerToken = () => {}
 
+/**
+ * Using 1-way hashing algorithm, generates API Key and writes to DB
+ * @param apiKeyType: values include USER, ADMIN 
+ * @returns 
+ */
 const getClientId = (apiToken) => {
-    // use apiToken to search and fetch clientId from the api_keys table
-    return 123456789;   // retrieve clientId from the api_keys table, this should be equivalent unix-timestamp in millisecond
- };
+   // use apiToken to search and fetch clientId from the api_keys table
+   return 123456789;   // retrieve clientId from the api_keys table, this should be equivalent unix-timestamp in millisecond
+};
 
-const isValidAPIKey = (apiKey, userAPIKeyType) => {
-   const apiValidityStatus = apiKey === getAPIKey(userAPIKeyType) ? true : false;
+
+const getBearerToken = () => {
+   return 'xxxx';
+};
+
+
+const isValidAPIKey = (apiKey, apiKeyType, clientId = null) => {
+   const apiValidityStatus = apiKey === getAPIKey(apiKeyType, clientId) ? true : false;
    
    return apiValidityStatus;
 };
 
-const isValidAdminAPIKey = (adminAPIKey) => {
-   console.log('AdminAPIKey: ', adminAPIKey);
-   const apiKeyType = 'ADMIN';
+// generate APIKey
+const generateAPIKey = (apiKeyType) => {
+   return 'xxx';
+};
 
-   return adminAPIKey === getAPIKey(apiKeyType);
+ /**
+  * Uses 1-way hashing algorithm, generates bearer's token
+  */
+const generateBearerToken = () => {
+   return 'xxxx';
 };
 
 
+
 module.exports = {
-   generateAPIKey,
+   getAPIKey,
    getClientId,
-   generateBearerToken,
+   getBearerToken,
    isValidAPIKey,
-   isValidAdminAPIKey
 };

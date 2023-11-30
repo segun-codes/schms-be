@@ -1,4 +1,4 @@
-const mysqlConn = require('../../utils/dbConnection').mysqlConn;
+let mysqlConn = require('../../utils/dbConnection').mysqlConn;
 const isTableExist = require('../model-utils/schemaUtils').isTableExist;
 const makeFieldUnique = require('../model-utils/schemaUtils').makeFieldUnique;
 const getDBConnection = require('../model-utils/schemaUtils').getDBConnection;
@@ -6,15 +6,20 @@ const getDBConnection = require('../model-utils/schemaUtils').getDBConnection;
 
 /**
  *  This schema is for the table that stores top-level information about each client (i.e., a school)  
+ *  @conn required to support testing only
  */
 
-const schoolSchema = async () => { 
-    const conn = await getDBConnection();
+const schoolSchema = async (conn = null) => { 
 
     if (conn) {
+        mysqlConn = conn;
+    }
+
+    if (mysqlConn) {
         console.log('MySQL DB Connected');
-        
-        const tableExists = await isTableExist('schools');
+
+        const tableExists = conn !== null ? await isTableExist('schools', conn) : await isTableExist('schools');
+        //console.log('...tableExists: ', tableExists);
 
         if (!tableExists) {
             try {
@@ -39,7 +44,7 @@ const schoolSchema = async () => {
                         console.log('schools schema setup successful');    
                     });
                 
-                await makeFieldUnique('schools', 'name'); // I want two fields to be unique across multiple rows, how to do this
+                await makeFieldUnique('schools', 'name', mysqlConn); // I want two fields to be unique across multiple rows, how to do this
             } catch(err) {
                 throw err;
             }
@@ -48,6 +53,7 @@ const schoolSchema = async () => {
         }                
     }
 };
+
 
 
 module.exports = {

@@ -4,9 +4,9 @@
   "description": "A backend software system to manage business processes typical of primary and secondary schools.",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon app.js",
+    "start:dev": "nodemon index.js",
     "start:prod": "node --trace-warnings app.js",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "keywords": [
     "school",
@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
   }
 }

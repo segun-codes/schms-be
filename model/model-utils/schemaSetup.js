@@ -9,38 +9,38 @@ const parentSchema = require('../basic/parentSchema').parentSchema;
 const employeeSchema = require('../basic/employeeSchema').employeeSchema;
 const schoolSchema = require('../admin/schoolSchema').schoolSchema;
 
-const setUpSchema = async (tableName) => {
+const setUpSchema = async (tableName, conn) => {
     try {
         switch(tableName) {
             case 'school_terms': 
-                await termSchema();
+                await termSchema(conn);
                 break; 
             case 'academic_sessions': 
-                await sessionSchema();
+                await sessionSchema(conn);
                 break;
             case 'students': 
-                await studentSchema();
+                await studentSchema(conn);
                 break; 
             case 'employees': 
-                await employeeSchema();
+                await employeeSchema(conn);
                 break;
             case 'subjects': 
-                await subjectSchema();
+                await subjectSchema(conn);
                 break; 
             case 'curricula': 
-                await curriculumSchema();
+                await curriculumSchema(conn);
                 break; 
             case 'classrooms': 
-                await classroomSchema();
+                await classroomSchema(conn);
                 break; 
             case 'addresses': 
-                await addressSchema();
+                await addressSchema(conn);
                 break;
             case 'parents':
-                await parentSchema();
+                await parentSchema(conn);
                 break; 
             case 'schools':
-                await schoolSchema();
+                await schoolSchema(conn);
                 break; 
         }
     } catch(err) {

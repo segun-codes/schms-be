@@ -1,22 +1,22 @@
-const mysqlConn = require('../../utils/dbConnection').mysqlConn;
+let mysqlConn = require('../../utils/dbConnection').mysqlConn;
 const isTableExist = require('../model-utils/schemaUtils').isTableExist;
 const getDBConnection = require('../model-utils/schemaUtils').getDBConnection;
 const makeFieldUnique = require('../model-utils/schemaUtils').makeFieldUnique;
 
 
-const studentSchema = async (connection = null) => {
-    let conn;
-
-    if (conn != null) { // required to support low-level testing
-        conn = connection;
-    } else {
-        conn = await getDBConnection();
-    }
+const studentSchema = async (conn = null) => {
 
     if (conn) {
+        mysqlConn = conn;
+    }
+
+    if (mysqlConn) {
         console.log('MySQL DB Connected');
         
-        const tableExists = await isTableExist('students');
+        //const tableExists = await isTableExist('students');
+        const tableExists = conn !== null ? await isTableExist('students', conn) : await isTableExist('students');
+
+        //console.log('...tableEixsts', tableExists);
 
         if (!tableExists) {
             try {
@@ -42,7 +42,7 @@ const studentSchema = async (connection = null) => {
 
                         console.log('Students Schema setup successful');    
                     });
-                await makeFieldUnique('students', ['first_name', 'middle_name', 'last_name']);
+                await makeFieldUnique('students', ['middle_name', 'last_name'], conn);
             } catch(err) {
                 throw err;
             }
