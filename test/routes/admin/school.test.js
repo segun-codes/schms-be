@@ -22,30 +22,10 @@ describe('GET /schoolId', () => {
         console.log('Inside school.test: DB connection handle destroyed...');
     });
 
-    // WORKING
-    // it('responds with json', () => {
-    //     request(schmsApp)
-    //         .get('/1') //'/:schoolId'
-    //         //.expect('Content-Type', 'text/html; charset=utf-8')
-    //         .expect('Content-Type', 'application/json')
-    //         .expect(200)
-    //         .end(function (err, res) {
-    //             console.log('err: ', err);
-    //         });
-    // });
-
-    // 
-    // it('responds with json', async function() {
-    //     const response = await request(schmsApp)
-    //     .get('/1')
-    //     .expect('Content-Type', 'text/html; charset=utf-8');
-    //     //.set('Accept', 'application/json');
-
-    //     //console.log('response', response);
-    //     //expect(response.headers["Content-Type"]).toMatch(/json/);
-    //     expect(response.status).toEqual(200);
-    //     //expect(response.body.email).toEqual('foo@bar.com');
-    // });
+    it('responds with json', async () => {
+        const response = await request(schmsApp).get('/api/v1/schools/1');
+        expect(response.statusCode).toEqual(200);
+    });
 });
 
 
