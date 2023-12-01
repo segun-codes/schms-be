@@ -1,4 +1,5 @@
-let mysqlConn = require('./dbConnection').mysqlConn;
+//let mysqlConn = require('./dbConnection').mysqlConn; // uncomment to use dev db
+let mysqlConn = require('./dbConnection').mysqlConnTest; // uncomment to use test db
 const setUpSchema = require('../model/model-utils/schemaSetup').setUpSchema;
 const convertToSnakeCase = require('../utils/genUtils').convertToSnakeCase;
 const errorMessages = require('../config/errorConfig').errorMessages;

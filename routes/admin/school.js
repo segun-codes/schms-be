@@ -7,15 +7,10 @@ const schoolRouter = express.Router();
 
 // retrieves a registered school given schoolId
 schoolRouter.get('/:schoolId', async (req, res) => {
-    console.log('Control got here...');
     const schoolId = req.params.schoolId;
     const school = await schoolController.retrieveSchool(schoolId);
-    // res.status(school.code).send({ 
-    //     status: school.status, 
-    //     message: school.message, 
-    //     payload: school.payload 
-    // });
-    res.status(school.code).json({ 
+
+    res.status(school.code).send({ 
         status: school.status, 
         message: school.message, 
         payload: school.payload 
