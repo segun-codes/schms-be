@@ -11,7 +11,6 @@ const writeAddress = async (addressData) => {
     const apiKey = addressData.apiKey;
     const clientId = getClientId(apiKey);
     const addressId = await generateAddressId(targetField, clientId);
-
     //console.log('clientId: ', clientId);
     //console.log('addressId: ', addressId);
 

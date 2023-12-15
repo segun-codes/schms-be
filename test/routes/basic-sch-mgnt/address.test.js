@@ -10,6 +10,7 @@ const schoolSchema = require('../../../model/admin/schoolSchema').schoolSchema;
  * Mockup backend will be used when necessary
  */
 describe('GET /addressId', () => {
+    const addressTable = 'addresses';
     const schoolTable = 'schools';
 
     // setup "schools" table
@@ -20,7 +21,7 @@ describe('GET /addressId', () => {
 
     // drop table and close db connection handle
     afterAll(async () => {
-        await mysqlConn.schema.dropTable('addresses');
+        await mysqlConn.schema.dropTable(addressTable);
         await mysqlConn.schema.dropTable(schoolTable);
         await mysqlConn.destroy();
         console.log('Inside address.test: tables schools and address dropped; DB connection handle destroyed...');
@@ -44,32 +45,51 @@ describe('GET /addressId', () => {
         expect(response.res.statusCode).toEqual(201);
     });
 
-    //1.
-    // it('should produce correct response code', async () => {
-    //     const response = await request(schmsApp).get('/api/v1/schools/1');
-    //     expect(response.statusCode).toEqual(200);
-    // });
+    //2.
+    it('should produce correct response code', async () => {
+        const response = await request(schmsApp).get('/api/v1/addresses/1004'); 
+        expect(response.statusCode).toEqual(200);
+    });
 
-    // //2.
-    // it('should produce correct number of schools added', async () => {
-    //     await mysqlConn(tableName).insert(schData2);
+    // //3.
+    it('should produce correct number of addresses added', async () => {
+        const address2 = {
+            address_id: 1005,
+            emp_id: 1003,
+            student_id: 'NLS202310002',
+            house_no: 2,
+            street_line_one: '141 Lanre Badmus Str.',
+            street_line_two: 'Night Road',
+            town_city: 'Waterloo',
+            state_region: 'Ontario',
+            country: 'Canada', 
+            post_code: 10223
+        };
 
-    //     const response = await request(schmsApp).get('/api/v1/schools/');
-    //     const schoolCount = response._body.payload.length;
-    //     expect(schoolCount).toEqual(2);
-    // });
+        await mysqlConn(addressTable).insert(address2);
 
-    // //4. 
-    // it('should return http code for create', async () => {
-    //     const response = await request(schmsApp).patch('/api/v1/schools/').send(schData4);
-    //     expect(response.res.statusCode).toEqual(201);
-    // });
+        const response = await request(schmsApp).get('/api/v1/addresses/');
+        const addressCount = response.body.payload.length;
+        expect(addressCount).toEqual(2);
+    });
 
-    // //5.
-    // it('should produce correct response code', async () => {
-    //     const response = await request(schmsApp).delete('/api/v1/schools/1');
-    //     expect(response.statusCode).toEqual(200);
-    // });
+    //4. 
+    it('should return http code for create', async () => {
+        const address2Update = {
+            addressId: 1005,
+            stateRegion: 'Quebec',
+            country: 'Kanada', 
+        };
+
+        const response = await request(schmsApp).patch('/api/v1/addresses/').send(address2Update);
+        expect(response.res.statusCode).toEqual(201);
+    });
+
+    //5.
+    it('should produce correct response code', async () => {
+        const response = await request(schmsApp).delete('/api/v1/addresses/1005');
+        expect(response.statusCode).toEqual(200);
+    });
 });
 
 
