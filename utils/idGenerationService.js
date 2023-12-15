@@ -23,7 +23,7 @@ const generateNextId = async (targetField, clientId, schlData = null, conn = nul
 
     let prevNo = extractPrevIdNumber(targetField, tempObj); 
 
-    console.log('Previous Student No in School Table: ', prevNo);
+    //console.log('Previous Student No in School Table: ', prevNo);
       
     if (schlData) {
         schlData.prevStudentNo = prevNo;

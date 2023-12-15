@@ -45,7 +45,7 @@ const setUpSchema = async (tableName, conn) => {
         }
     } catch(err) {
         console.log(`${tableName} setup failed`);
-        console.log(err);
+        console.log(err.sqlMessage);
     }
 };
 

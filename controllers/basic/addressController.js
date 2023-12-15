@@ -1,4 +1,3 @@
-const mysqlConn = require('../../utils/dbConnection').mysqlConn;
 const getClientId = require('../../utils/admin/tokenService').getClientId;
 const generateAddressId = require('../../utils/idGenerationService').generateNextId;
 const { performWrite, performRead, performReadAll, performDelete, performUpdate } = require('../../utils/dbOperations-one');
@@ -13,8 +12,8 @@ const writeAddress = async (addressData) => {
     const clientId = getClientId(apiKey);
     const addressId = await generateAddressId(targetField, clientId);
 
-    console.log('clientId: ', clientId);
-    console.log('addressId: ', addressId);
+    //console.log('clientId: ', clientId);
+    //console.log('addressId: ', addressId);
 
     const address = { 
         address_id: addressId,

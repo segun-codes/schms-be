@@ -17,7 +17,7 @@ describe('test suite for token services', () => {
 
     test('get client id', () => {
         const clientId = tokenService.getClientId();
-        expect(clientId).toBe(123456789);
+        expect(clientId).toBe(123456781);
     });
 
     test('get bearer\'s token', () => {

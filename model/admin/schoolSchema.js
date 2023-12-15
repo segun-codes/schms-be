@@ -1,7 +1,6 @@
-let mysqlConn = require('../../utils/dbConnection').mysqlConn;
 const isTableExist = require('../model-utils/schemaUtils').isTableExist;
 const makeFieldUnique = require('../model-utils/schemaUtils').makeFieldUnique;
-const getDBConnection = require('../model-utils/schemaUtils').getDBConnection;
+
 
 
 /**
@@ -9,16 +8,11 @@ const getDBConnection = require('../model-utils/schemaUtils').getDBConnection;
  *  @conn required to support testing only
  */
 
-const schoolSchema = async (conn = null) => { 
-
-    if (conn) {
-        mysqlConn = conn;
-    }
-
+const schoolSchema = async (mysqlConn) => { 
     if (mysqlConn) {
         console.log('MySQL DB Connected');
 
-        const tableExists = conn !== null ? await isTableExist('schools', conn) : await isTableExist('schools');
+        const tableExists = await isTableExist('schools', mysqlConn);
         //console.log('...tableExists: ', tableExists);
 
         if (!tableExists) {

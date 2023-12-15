@@ -28,7 +28,7 @@ const getAPIKey = (apiKeyType, clientId = null) => {
  */
 const getClientId = (apiToken) => {
    // use apiToken to search and fetch clientId from the api_keys table
-   return 123456789;   // retrieve clientId from the api_keys table, this should be equivalent unix-timestamp in millisecond
+   return 123456781;   // retrieve clientId from the api_keys table, this should be equivalent unix-timestamp in millisecond
 };
 
 

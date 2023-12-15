@@ -76,7 +76,10 @@ YYYYYY -
 ZZZ - 3-letters, it must represent the  
 
 
-
 # Subfolder "Admin"
-Contains services that is shareable among many schools subscribed to the platform
+Contains services that are shareable among many schools subscribed to the platform
+
+
+# Using Dev or Test DB
+In file dbOperations-one.js uncomment the appropriate
 
