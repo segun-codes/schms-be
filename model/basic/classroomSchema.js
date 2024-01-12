@@ -1,20 +1,18 @@
-const mysqlConn = require('../../utils/dbConnection').mysqlConn;
+//const mysqlConn = require('../../utils/dbConnection').mysqlConn;
 const isTableExist = require('../model-utils/schemaUtils').isTableExist;
 const makeFieldUnique = require('../model-utils/schemaUtils').makeFieldUnique;
-const getDBConnection = require('../model-utils/schemaUtils').getDBConnection;
+//const getDBConnection = require('../model-utils/schemaUtils').getDBConnection;
 
 
-const classroomSchema = async () => { 
-    const conn = await getDBConnection();
-
+const classroomSchema = async (conn) => { 
     if (conn) {
         console.log('MySQL DB Connected');
         
-        const tableExists = await isTableExist('classrooms');
+        const tableExists = await isTableExist('classrooms', conn);
 
         if (!tableExists) {
             try {
-                await mysqlConn.schema
+                await conn.schema
                     .createTable('classrooms', (table) => { 
                         table.primary(['class_id']); 
                         table.string('class_id').notNullable();      
@@ -25,13 +23,15 @@ const classroomSchema = async () => {
                         console.log('classrooms schema setup successful');    
                     });
                 
-                await makeFieldUnique('classrooms', 'class_id'); 
+                await makeFieldUnique('classrooms', 'class_id', conn); 
             } catch(err) {
                 throw err;
             }
         } else {
             console.log('Existing classroom schema found, no need to create another');
         }                
+    } else {
+        console.log('DB connection handle missing');
     }
 };
 

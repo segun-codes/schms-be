@@ -1,0 +1,21 @@
+1. Implement primary key autogeneration for each of the table - 4completed, wip
+1.1 prevent API calls if schools table hasn't been setup - done
+1.2 prevent updating of schools table if duplicate insertion error is produced - done
+2. Implement API token generation, setup api_keys table and bearer's token generation
+3. Update school schema and other files - introduce the fied clientId 
+4. Prevent double sign-up in a graceful way
+
+
+edit controller
+edit 'schoolPropertySet' in dbOperations
+edit switch statement in idGe....js
+
+
+1. Result management
+    - CRUD result
+    - parent can view result
+    - teachers can perform CRUD
+    - result locks once term is concluded
+2. Pupils/student management
+3. Personnel management
+3. 

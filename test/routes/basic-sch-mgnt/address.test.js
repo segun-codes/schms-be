@@ -9,7 +9,7 @@ const schoolSchema = require('../../../model/admin/schoolSchema').schoolSchema;
  * Mockup backend not used since it inexpensive to test real endpoints
  * Mockup backend will be used when necessary
  */
-describe('GET /addressId', () => {
+describe('test suite for address resources', () => {
     const addressTable = 'addresses';
     const schoolTable = 'schools';
 

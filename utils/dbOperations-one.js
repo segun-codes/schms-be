@@ -21,6 +21,10 @@ const performDelete = async (tableName, itemName, queryCriteria) => {
     return await deleteItem(tableName, itemName, queryCriteria);  
 };
 
+const performDeleteAll = async (tableName, itemName, queryCriteria) => {
+    return await deleteAllItems(tableName, itemName, queryCriteria);  
+};
+
 const performUpdate = async (tableName, itemName, itemToUpdate, queryCriteria) => {
     return await updateItem(tableName, itemName, itemToUpdate, queryCriteria);
 };
@@ -36,15 +40,24 @@ const performUpdate = async (tableName, itemName, itemToUpdate, queryCriteria) =
 const writeToDB = async (tableName, dataToInsert, message) => { // tableName = 'school_term', message = 'school term', insertEntries = { session_name: schlSess.sessionName, session_year: schlSess.sessionYear, comment: schlSess.comment}
     await setUpSchema(tableName, mysqlConn);
 
-    // if (conn) {
-    //     mysqlConn = conn;
-    // }
-
     try {
         const insRowCount = await mysqlConn(tableName).insert(dataToInsert);
+
         if (insRowCount) {
             console.log('Insertion completed successfully'); 
-            return { code: 201, status: 'success', message: `New ${message} created` };
+
+            let writeOpStatus = {};
+
+            if (tableName === 'schools') {
+                const school = await retrieveFromDb(tableName, 'school', { name: dataToInsert.name },  ['sch_id']);
+                writeOpStatus.schId = school.payload[0].sch_id;
+            }
+
+            writeOpStatus.code = 201;
+            writeOpStatus.status = 'status';
+            writeOpStatus.message = `New ${message} created`;
+
+            return writeOpStatus;
         }
     } catch(err) {
         console.log(`Insertion failed for duplicate entry or other unknown reason for table ${tableName}!`); 
@@ -68,10 +81,6 @@ const writeToDB = async (tableName, dataToInsert, message) => { // tableName = '
 
 const retrieveFromDb = async (tableName, itemName, queryCriteria, fieldsToSelect = null) => {  
     await setUpSchema(tableName, mysqlConn);
-
-    // if (conn) {
-    //     mysqlConn = conn;
-    // }
     
     try {
         const retrievedData = await mysqlConn(tableName).where(queryCriteria).select(fieldsToSelect);  
@@ -93,10 +102,6 @@ const retrieveAllFromDb = async (tableName, itemName, fieldsToSelect) => {
 
     let items = [];
 
-    // if (conn) {
-    //     mysqlConn = conn;
-    // }
-
     try {
         const retrievedItems = await mysqlConn.select(fieldsToSelect).from(tableName); 
 
@@ -115,12 +120,26 @@ const retrieveAllFromDb = async (tableName, itemName, fieldsToSelect) => {
     return { code: 404, status: 'failed', message: `no ${itemName} data found`, payload: {} };
 };
 
+
+/**
+ * @joinCriteria : in the form { table1: 'schools', table2: 'schoolauths', table1PryKey: 'schools.sch_id', table2PryKey: 'schoolauths.sch_id'}
+ * @fieldsToSelect : in the form ['schools.sch_id', 'schoolauths']  
+ */
+const retrieveTwoTableFromDb = async (joinCriteria, fieldsToSelect) => {
+    const result = await mysqlConn(joinCriteria.table1)
+                        .join(joinCriteria.table2, joinCriteria.table1PryKey, '=', joinCriteria.table2PryKey)
+                        .select(fieldsToSelect);
+    return result;
+};
+
+const countEntries = async (schId) => {
+    const count = await mysqlConn('schoolAuths').count({ loggedInCount: 'sch_id' });
+
+    return count;
+};
+
 const deleteItem = async (tableName, itemName, queryCriteria) => {
     await setUpSchema(tableName, mysqlConn);
-
-    // if (conn) {
-    //     mysqlConn = conn;
-    // }
 
     try {
         const deleteCount = await mysqlConn(tableName).where(queryCriteria).del();
@@ -137,6 +156,7 @@ const deleteItem = async (tableName, itemName, queryCriteria) => {
     return { code: 404, status: 'failed', message: `${itemName} not found` };    
 };
 
+
 /**
  * 
  * @param {*} tableName 
@@ -150,7 +170,7 @@ const updateItem =  async (tableName, itemName, itemToUpdate, queryCriteria) => 
     //console.log('queryCriteria: ', queryCriteria);
 
     let targetPropertySet;
-    let updateObject = {}; // used to construct object in format that knexjs requirement
+    let updateObject = {}; // used to construct object into form that knexjs requires
 
     const schlSessPropertySet = ['sessionName', 'sessionYear', 'comment'];     
     const schlTermPropertySet = ['termId', 'term', 'sessionYear', 'comment'];
@@ -247,5 +267,8 @@ module.exports = {
     performRead,
     performReadAll,
     performDelete,
-    performUpdate
+    //performDeleteAll,
+    performUpdate,
+    retrieveTwoTableFromDb,
+    countEntries,
 };

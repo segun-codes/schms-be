@@ -8,6 +8,7 @@ const addressSchema = require('../basic/addressSchema').addressSchema;
 const parentSchema = require('../basic/parentSchema').parentSchema;
 const employeeSchema = require('../basic/employeeSchema').employeeSchema;
 const schoolSchema = require('../admin/schoolSchema').schoolSchema;
+const schoolAuthSchema = require('../admin/schoolAuthSchema').schoolAuthSchema;
 
 const setUpSchema = async (tableName, conn) => {
     try {
@@ -41,6 +42,9 @@ const setUpSchema = async (tableName, conn) => {
                 break; 
             case 'schools':
                 await schoolSchema(conn);
+                break; 
+            case 'schoolAuths':
+                await schoolAuthSchema(conn);
                 break; 
         }
     } catch(err) {

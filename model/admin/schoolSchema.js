@@ -3,38 +3,37 @@ const makeFieldUnique = require('../model-utils/schemaUtils').makeFieldUnique;
 
 
 
-/**
- *  This schema is for the table that stores top-level information about each client (i.e., a school)  
- *  @conn required to support testing only
- */
-
 const schoolSchema = async (mysqlConn) => { 
     if (mysqlConn) {
         console.log('MySQL DB Connected');
 
         const tableExists = await isTableExist('schools', mysqlConn);
-        //console.log('...tableExists: ', tableExists);
 
         if (!tableExists) {
             try {
                 await mysqlConn.schema
                     .createTable('schools', (table) => { 
-                        table.primary(['sch_id']); 
-                        table.increments('sch_id');  
-                        table.string('name').notNullable();
-                        table.string('name_acronym').notNullable();      //must be three letter e.g., NFL - For Nafowa Little Angels School     
-                        table.string('type').notNullable();              //possible values: nursery, nurs_primary, nurs_primary_secondary, secondary   
-                        table.string('address').notNullable();  
+                        table.uuid('sch_id', {primaryKey: true}).defaultTo(mysqlConn.fn.uuid());  
+                        table.string('name').checkLength('>=', 15);     
+                        table.string('name_acronym').checkLength('=', 3);
+                        table.string('type').checkIn(['nursery', 'nurs_primary', 'primary', 'nurs_primary_secondary', 'secondary'], 'checkType'); 
+                        table.string('address').checkLength('>=', 7); 
+                        table.string('username').checkLength('>=', 5);
+                        table.string('password').checkLength('>=', 8);
+                        table.string('phone_no_1').notNullable();
+                        table.string('phone_no_2').notNullable();
+                        table.string('email').notNullable();      
                         table.integer('last_student_no');    // used to track student number already issued out  
                         table.integer('last_employee_no');   // used to track employee number already issued out  
                         table.integer('last_parent_no');     // used to track parent number already issued out
                         table.integer('last_address_no');    // used to track parent number already issued out
                         table.integer('last_classroom_no');  // place value 0 - 0000 
-                        table.integer('last_curriculum_no');
+                        //table.integer('last_curriculum_no');
                         // table.string('last_session_year');      // in format YYYY-YYYY (e.g., 2020-2021)
                         // table.string('last_subject_no');
                         // table.string('last_term_no');
-                        table.bigint('client_id'); 
+                        table.bigint('client_id');    // 
+                        table.binary('profile_pix');
                         console.log('schools schema setup successful');    
                     });
                 

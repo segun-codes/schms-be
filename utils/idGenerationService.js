@@ -1,3 +1,6 @@
+const jwt = require('jsonwebtoken');
+const dotEnv = require('dotenv').config();
+
 const dbActions = require('./dbOperations-one');
 const toCamelCase = require('./genUtils').toCamelCase;
 
@@ -107,13 +110,27 @@ const createStudentId = (schlData) => {
 };
 
 /**
- * 
  * @param sessYear: should always be in format yyyy-yyyy e.g., 2022-2023 
  * @returns '2022', given the above example 
  */
-const getLowerBoundYear = (sessYear) => {
-    //console.log('sessYear: ', sessYear);    
+const getLowerBoundYear = (sessYear) => {   
     return sessYear.split('-')[0];
+};
+
+/**
+ * 
+ * @param {*} schId 
+ * @returns 
+ * 
+ * Note: authToken is produced using padded schId. 
+ */
+const generateJWToken = (schId) => {
+   const authToken = jwt.sign({ schId }, process.env.SECRET_KEY, { expiresIn: '3h' });
+   return authToken;
+};
+
+const verifyJWToken = (authToken) => {
+    return jwt.verify(authToken, process.env.SECRET_KEY);
 };
 
 
@@ -123,6 +140,8 @@ module.exports = {
     createStudentId,
     extractPrevIdNumber,
     generateNextId,
+    generateJWToken,
+    verifyJWToken
 }
 
 
